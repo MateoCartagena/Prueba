@@ -118,7 +118,7 @@ spec:
       interval: 60s                   # Dentro de una ventana de 60 segundos
       baseEjectionTime: 30s          # El destino será expulsado durante 30s
       maxEjectionPercent: 100        # Hasta el 100% del tráfico puede ser expulsado
-
+```
 ---
 
 ## 📈 Monitoreo y Trazabilidad
@@ -129,7 +129,7 @@ spec:
 - **Jaeger**: Trazabilidad distribuida para analizar el recorrido completo de las solicitudes a través del sistema.
 - **Prometheus**: Recolección de métricas clave de rendimiento y estado de los servicios.
 - **Grafana**: Visualización de métricas y trazas mediante dashboards personalizables.
-```
+
 ---
 
 ### 📊 Métricas Capturadas (Prometheus)
