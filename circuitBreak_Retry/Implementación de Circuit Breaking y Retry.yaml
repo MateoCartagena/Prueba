@@ -1,0 +1,40 @@
+# VirtualService para aplicar Retry
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: solicitudes-service
+spec:
+  hosts:
+    - solicitudes.local
+  http:
+    - route:
+        - destination:
+            host: solicitudes-service
+            port:
+              number: 80
+      retries:
+        attempts: 2                    # Intentar máximo 2 veces
+        perTryTimeout: 2s             # Cada intento con timeout de 2 segundos
+        retryOn: gateway-error,connect-failure,refused-stream
+
+---
+
+# DestinationRule para aplicar Circuit Breaking
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: solicitudes-destination
+spec:
+  host: solicitudes-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutive5xxErrors: 3         # Si hay 3 errores 5xx consecutivos
+      interval: 60s                   # Dentro de una ventana de 60 segundos
+      baseEjectionTime: 30s          # El destino será expulsado durante 30s
+      maxEjectionPercent: 100        # Hasta el 100% del tráfico puede ser expulsado

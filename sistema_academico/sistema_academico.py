@@ -3,7 +3,6 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Base de datos simulada en memoria con un estudiante por defecto
 estudiantes = {
     "1": {
         "id": "1",
@@ -11,7 +10,6 @@ estudiantes = {
     }
 }
 
-# El siguiente ID a usar
 next_id = 2
 
 @app.route('/students', methods=['POST'])

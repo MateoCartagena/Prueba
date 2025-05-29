@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 import jwt
 
 app = Flask(__name__)
-SECRET_KEY = "RJkvfT6wGkPVEki8zwPBT8scLfl4qNOs"
+SECRET_KEY = "RJkvfT6wGkPVEki8zwPBT8scLfl4qNOs" #Key de Kong
 
 @app.route('/validar-token', methods=['POST'])
 def validar_token():

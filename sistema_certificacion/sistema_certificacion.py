@@ -2,6 +2,8 @@ from flask import Flask, Response, request
 from spyne import Application, ServiceBase, Integer, Unicode, rpc
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
+import xml.etree.ElementTree as ET
+import html
 
 app = Flask(__name__)
 

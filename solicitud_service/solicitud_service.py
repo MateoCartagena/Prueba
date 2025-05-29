@@ -100,7 +100,7 @@ def crear_solicitud():
 
     solicitud = {
         'id': ultimo_id,
-        'estudiante': nombre_estudiante,  # ✅ usar la variable correcta
+        'estudiante': nombre_estudiante,  
         'tipo_solicitud': data['tipo_solicitud'],
         'estado': 'en revisión',
     }
