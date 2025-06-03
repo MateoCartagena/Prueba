@@ -1,5 +1,10 @@
 # generar_token.py
 import jwt
 
-token = jwt.encode({"usuario": "juan.perez"}, "mi_clave_secreta", algorithm="HS256")
+payload = {
+    "name": "Juan Perez",
+    "iss": "sKYih2eqdxdhLbK5AdzXmbovEH5Y21EJ"  # key de Kong
+}
+
+token = jwt.encode(payload, "RJkvfT6wGkPVEki8zwPBT8scLfl4qNOs", algorithm="HS256")
 print(token)

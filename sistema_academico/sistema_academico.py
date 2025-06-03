@@ -3,24 +3,40 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Base de datos simulada
-solicitudes = {}
+# Base de datos simulada en memoria con un estudiante por defecto
+estudiantes = {
+    "1": {
+        "id": "1",
+        "name": "Juan Perez"
+    }
+}
 
-@app.route('/solicitudes', methods=['POST'])
-def crear_solicitud():
+# El siguiente ID a usar
+next_id = 2
+
+@app.route('/students', methods=['POST'])
+def crear_estudiante():
+    global next_id
     data = request.json
-    solicitud_id = len(solicitudes) + 1
-    data['id'] = solicitud_id
-    data['estado'] = 'en revisión'
-    solicitudes[solicitud_id] = data
-    return jsonify(data), 201
+    if not data or 'name' not in data:
+        return jsonify({'error': 'El campo "name" es obligatorio'}), 400
 
-@app.route('/solicitudes/<int:solicitud_id>', methods=['GET'])
-def obtener_solicitud(solicitud_id):
-    solicitud = solicitudes.get(solicitud_id)
-    if solicitud:
-        return jsonify(solicitud), 200
-    return jsonify({'error': 'Solicitud no encontrada'}), 404
+    student_id = str(next_id)
+    next_id += 1
+
+    estudiante = {
+        'id': student_id,
+        'name': data['name']
+    }
+    estudiantes[student_id] = estudiante
+    return jsonify(estudiante), 201
+
+@app.route('/students/<student_id>', methods=['GET'])
+def obtener_estudiante(student_id):
+    estudiante = estudiantes.get(student_id)
+    if estudiante:
+        return jsonify(estudiante), 200
+    return jsonify({'error': 'Estudiante no encontrado'}), 404
 
 if __name__ == '__main__':
     app.run(port=5001)

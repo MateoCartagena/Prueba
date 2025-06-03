@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ex="example.soap">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ex:registrar_certificacion>
+         <ex:idSolicitud>5</ex:idSolicitud>
+      </ex:registrar_certificacion>
+   </soapenv:Body>
+</soapenv:Envelope>
