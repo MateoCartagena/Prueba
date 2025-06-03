@@ -1,26 +1,61 @@
-## Diagrama 
+# 📡 Arquitectura y Monitoreo del Sistema
 
-![POST](img/diagrama.png)
+## 🗂️ Diagrama General
 
+Este diagrama muestra el flujo general de las solicitudes a través del sistema:
 
+![Diagrama General](img/diagrama.png)
 
-## Monitoreo y trazabilidad 
+---
 
-¿Qué herramientas utilizarías?
+## ⚙️ Configuración del API Gateway (Kong)
 
-Kiali: Para visualizar la topología del Service Mesh (Istio), mostrando interacciones, latencias y errores entre servicios.
-Jaeger: Para trazabilidad distribuida, rastreando el flujo de solicitudes a través de los componentes del sistema.
-Prometheus: Para recolectar y almacenar métricas de rendimiento y estado de SolicitudService y API Gateway (Kong).
-Grafana: Para crear dashboards que integren métricas de Prometheus y trazas de Jaeger.
-¿Qué métricas y trazas capturarías?
+### 🔐 Autenticación JWT
 
-Métricas (Prometheus):
-Latencia de solicitudes: Tiempo de respuesta de endpoints REST (/solicitudes, /solicitudes/{id}) y llamadas SOAP.
-Tasa de errores: Porcentaje de respuestas HTTP 4xx/5xx en SolicitudService y Kong.
-Estado del Circuit Breaker: Estado abierto/cerrado para las llamadas al Sistema de Certificación (SOAP).
-Límite de tasa: Número de solicitudes bloqueadas por rate limiting en Kong.
-Trazas (Jaeger):
-ID de solicitud (X-Request-ID): Identificador único propagado en cabeceras HTTP para rastrear el flujo desde el cliente, pasando por Kong, SolicitudService, Sistema Académico (REST) y Sistema de Certificación (SOAP).
-Tiempos de servicio: Duración de cada interacción entre servicios (e.g., REST a Sistema Académico, SOAP a Sistema de Certificación).
-Errores específicos: Detalles de fallos, como timeouts en SOAP o JWT inválidos.
+Se ha configurado el API Gateway para validar tokens JWT, asegurando que solo los usuarios autenticados puedan acceder a los endpoints protegidos.
+
+![JWT Config 1](img/jwt1.png)  
+![JWT Config 2](img/jwt2.png)
+
+---
+
+### 🚦 Rate Limiting
+
+Se implementó control de tasa para prevenir abuso y proteger los servicios backend:
+
+![Rate Limiting](img/rate.png)
+
+---
+
+## 📈 Monitoreo y Trazabilidad
+
+### 🛠️ Herramientas Utilizadas
+
+- **Kiali**: Visualización de la topología del *Service Mesh* (Istio), incluyendo latencias, errores y relaciones entre servicios.
+- **Jaeger**: Trazabilidad distribuida para analizar el recorrido completo de las solicitudes a través del sistema.
+- **Prometheus**: Recolección de métricas clave de rendimiento y estado de los servicios.
+- **Grafana**: Visualización de métricas y trazas mediante dashboards personalizables.
+
+---
+
+### 📊 Métricas Capturadas (Prometheus)
+
+| Métrica                      | Descripción                                                                                 |
+|-----------------------------|---------------------------------------------------------------------------------------------|
+| Latencia de solicitudes      | Tiempo de respuesta para endpoints REST (`/solicitudes`, `/solicitudes/{id}`) y llamadas SOAP. |
+| Tasa de errores              | Porcentaje de respuestas HTTP 4xx y 5xx tanto en `SolicitudService` como en Kong.           |
+| Estado del Circuit Breaker   | Estado (abierto/cerrado) de los circuit breakers en las llamadas al Sistema de Certificación (SOAP). |
+| Límite de tasa (Rate Limit)  | Número de solicitudes bloqueadas por las políticas de rate limiting configuradas en Kong.  |
+
+---
+
+### 📌 Trazas Capturadas (Jaeger)
+
+| Traza                        | Detalles                                                                                  |
+|------------------------------|-------------------------------------------------------------------------------------------|
+| `X-Request-ID`               | Identificador único propagado a través de servicios para seguimiento completo de cada solicitud. |
+| Tiempos de servicio          | Duración individual de llamadas entre servicios: Kong → SolicitudService → Sistema Académico (REST) → Sistema de Certificación (SOAP). |
+| Errores específicos          | Información sobre fallos como timeouts, errores SOAP, o JWT inválidos.                    |
+
+---
 
